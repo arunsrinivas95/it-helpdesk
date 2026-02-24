@@ -48,16 +48,24 @@ def upload():
         def get(row, key):
             return row.get(header_map.get(normalize(key), ""), "").strip()
 
-        count = 0
         assets.clear()
+        count = 0
         for row in reader:
             asset = {
                 "asset_code": get(row, "Asset Code"),
+                "sl_no": get(row, "Sl.No"),
                 "location": get(row, "Location"),
+                "department_user": get(row, "Department / User"),
                 "device_type": get(row, "Device Type"),
+                "purpose": get(row, "Purpose"),
+                "person_name": get(row, "Name of the person"),
+                "email": get(row, "Email Id"),
                 "brand": get(row, "Brand"),
                 "model": get(row, "Model"),
-                "email": get(row, "Email Id"),
+                "serial_number": get(row, "Serial Number"),
+                "windows_version": get(row, "Windows Version"),
+                "purchase_date": get(row, "Purchase Date"),
+                "age": get(row, "Age"),
             }
             assets.append(asset)
             count += 1
@@ -72,22 +80,50 @@ def list_assets():
         return "<p>No assets uploaded yet.</p><a href='/'>Back</a>"
 
     rows = "".join(
-        f"<tr><td>{a['asset_code']}</td><td>{a['device_type']}</td><td>{a['brand']}</td><td>{a['model']}</td><td>{a['location']}</td><td>{a['email']}</td></tr>"
+        f"""
+        <tr>
+          <td>{a['asset_code']}</td>
+          <td>{a['sl_no']}</td>
+          <td>{a['location']}</td>
+          <td>{a['department_user']}</td>
+          <td>{a['device_type']}</td>
+          <td>{a['purpose']}</td>
+          <td>{a['person_name']}</td>
+          <td>{a['email']}</td>
+          <td>{a['brand']}</td>
+          <td>{a['model']}</td>
+          <td>{a['serial_number']}</td>
+          <td>{a['windows_version']}</td>
+          <td>{a['purchase_date']}</td>
+          <td>{a['age']}</td>
+        </tr>
+        """
         for a in assets
     )
+
     html = f"""
     <h3>Assets</h3>
+    <div style="overflow-x:auto">
     <table border="1" cellpadding="6">
       <tr>
         <th>Asset Code</th>
-        <th>Type</th>
+        <th>Sl.No</th>
+        <th>Location</th>
+        <th>Department / User</th>
+        <th>Device Type</th>
+        <th>Purpose</th>
+        <th>Name</th>
+        <th>Email</th>
         <th>Brand</th>
         <th>Model</th>
-        <th>Location</th>
-        <th>Email</th>
+        <th>Serial Number</th>
+        <th>Windows Version</th>
+        <th>Purchase Date</th>
+        <th>Age</th>
       </tr>
       {rows}
     </table>
+    </div>
     <br><a href="/">Back</a>
     """
     return html
